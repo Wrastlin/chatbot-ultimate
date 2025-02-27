@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chatbot Demo Game | Chatbase Affiliate</title>
+    <title>AI Chatbot Demo Game</title>
     <style>
         body, html {
             margin: 0;
@@ -74,9 +74,165 @@
             cursor: pointer;
         }
     </style>
-    <meta http-equiv="refresh" content="0;url=landing.html">
 </head>
 <body>
-    <p>Redirecting to <a href="landing.html">Chatbot Ultimate Game</a>...</p>
+    <div id="game-container">
+        <div id="game-canvas" tabindex="0"></div>
+        <div id="click-overlay"></div>
+        <div id="game-ui">
+            <div class="score-item">Customers: <span id="customer-count">0</span></div>
+            <div class="score-item">Documents: <span id="docs-count">0</span></div>
+            <div class="score-item">Score: <span id="total-score">0</span></div>
+        </div>
+        <div id="focus-message">CLICK HERE TO ENABLE CONTROLS</div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <script src="sprites.js"></script>
+    <script src="game.js"></script>
+    
+    <script>
+        // Handle focus for keyboard controls
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameCanvas = document.getElementById('game-canvas');
+            const focusMessage = document.getElementById('focus-message');
+            const clickOverlay = document.getElementById('click-overlay');
+            const gameContainer = document.getElementById('game-container');
+            let hasFocus = false;
+            
+            // Function to set focus on the game canvas
+            function setGameFocus() {
+                hasFocus = true;
+                gameCanvas.focus();
+                focusMessage.style.display = 'none';
+                
+                // Remove the overlay once clicked
+                if (clickOverlay) {
+                    clickOverlay.style.display = 'none';
+                }
+                
+                // Force p5.js to recognize keyboard input
+                if (window.p5Instance) {
+                    // Reset key states in p5.js
+                    window.p5Instance._onblur();
+                    window.p5Instance._onfocus();
+                }
+            }
+            
+            // Click anywhere in the game container to focus
+            gameContainer.addEventListener('click', setGameFocus);
+            
+            // Specific handler for the overlay
+            if (clickOverlay) {
+                clickOverlay.addEventListener('click', setGameFocus);
+            }
+            
+            // Make sure p5.js instance is accessible
+            window.p5Instance = null;
+            const originalP5 = window.p5;
+            window.p5 = function(sketch) {
+                const instance = new originalP5(sketch);
+                window.p5Instance = instance;
+                return instance;
+            };
+            
+            // Override p5.js keyIsDown function to ensure it works with iframe
+            const originalKeyIsDown = p5.prototype.keyIsDown;
+            p5.prototype.keyIsDown = function(code) {
+                if (!hasFocus) return false;
+                return originalKeyIsDown.call(this, code);
+            };
+            
+            // Show focus message initially
+            focusMessage.style.display = 'block';
+            
+            // Add focus and blur event listeners
+            gameCanvas.addEventListener('focus', function() {
+                hasFocus = true;
+                focusMessage.style.display = 'none';
+            });
+            
+            gameCanvas.addEventListener('blur', function() {
+                hasFocus = false;
+                focusMessage.style.display = 'block';
+            });
+            
+            // Ensure the game container is clickable
+            gameContainer.style.cursor = 'pointer';
+            
+            // Add a click event to the document to handle focus when clicking outside and back in
+            document.addEventListener('click', function(e) {
+                if (!gameContainer.contains(e.target)) {
+                    hasFocus = false;
+                    focusMessage.style.display = 'block';
+                }
+            });
+        });
+        
+        // Ensure keyboard events are properly captured
+        window.addEventListener('keydown', function(e) {
+            // Prevent scrolling with arrow keys and space
+            if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+        }, false);
+        
+        // Additional handler for iframe keyboard events
+        window.addEventListener('message', function(e) {
+            if (e.data && e.data.type === 'keyEvent') {
+                // Simulate key events from parent frame
+                const keyEvent = new KeyboardEvent(e.data.eventType, {
+                    key: e.data.key,
+                    keyCode: e.data.keyCode,
+                    which: e.data.which,
+                    code: e.data.code,
+                    bubbles: true
+                });
+                document.dispatchEvent(keyEvent);
+            }
+        });
+        
+        // Add message event listener to receive keyboard events from parent page
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'keyEvent') {
+                // Create and dispatch a synthetic keyboard event
+                const keyEvent = new KeyboardEvent(event.data.eventType, {
+                    key: event.data.key,
+                    code: event.data.code,
+                    keyCode: event.data.keyCode,
+                    which: event.data.which,
+                    bubbles: true,
+                    cancelable: true
+                });
+                
+                document.dispatchEvent(keyEvent);
+                
+                // If we have a p5 instance, update its key state
+                if (window.p5Instance) {
+                    if (event.data.eventType === 'keydown') {
+                        window.p5Instance._onkeydown(keyEvent);
+                    } else if (event.data.eventType === 'keyup') {
+                        window.p5Instance._onkeyup(keyEvent);
+                    }
+                }
+            }
+        });
+        
+        // Make sure the canvas gets focus when clicked
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('game-canvas');
+            if (canvas) {
+                canvas.addEventListener('click', function() {
+                    this.focus();
+                    document.getElementById('focus-message').style.display = 'none';
+                });
+            }
+            
+            // Expose p5 instance to window for message handling
+            window.exposep5Instance = function(p5) {
+                window.p5Instance = p5;
+            };
+        });
+    </script>
 </body>
 </html> 
