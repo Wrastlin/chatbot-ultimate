@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot Demo Game | Chatbase Affiliate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .affiliate-disclosure {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #666666;
+            border-left: 3px solid #0070ff;
+        }
+        
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            background-color: #f8f9fa;
+            padding: 40px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: #000000;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #666666;
+        }
+        
+        .highlight {
+            color: #0070ff;
+            font-weight: bold;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #0070ff;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 112, 255, 0.2);
+            margin: 10px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 112, 255, 0.3);
+        }
+        
+        .cta-button.primary {
+            background: #0070ff;
+            font-size: 20px;
+            padding: 18px 36px;
+        }
+        
+        .cta-button.secondary {
+            background: #ffffff;
+            border: 2px solid #0070ff;
+            color: #0070ff;
+        }
+        
+        .game-showcase {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .game-showcase h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+        
+        .game-showcase p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #666666;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 900px;
+            height: 550px;
+            border: 2px solid #eaeaea;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .game-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .game-instructions {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 0 auto 20px auto;
+            max-width: 900px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+        
+        .game-instructions h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+        
+        .game-instructions ul {
+            padding-left: 20px;
+        }
+        
+        .game-instructions li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .leaderboard {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .leaderboard h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+        
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .benefit {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .benefit:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .benefit-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #0070ff;
+        }
+        
+        .benefit h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+        
+        .benefit p {
+            font-size: 16px;
+            color: #666666;
+            line-height: 1.6;
+        }
+        
+        .video-section {
+            background-color: #f8f9fa;
+            padding: 40px 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .video-section h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        
+        .video-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #666666;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .final-cta {
+            background-color: #f8f9fa;
+            padding: 50px 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .final-cta h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        
+        .final-cta p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #666666;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 14px;
+            color: #666666;
+            border-top: 1px solid #eaeaea;
+            background-color: #f8f9fa;
+            margin-top: 40px;
+        }
+        
+        .disclaimer-banner {
+            background-color: #f8f9fa;
+            color: #666666;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            border: 1px solid #eaeaea;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .benefit {
+                padding: 20px;
+            }
+            
+            .cta-button.primary {
+                font-size: 18px;
+                padding: 15px 30px;
+            }
+            
+            .game-container {
+                height: 450px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="hero">
+            <div class="hero-content">
+                <div class="logo">
+                    AI Chatbot Demo Game
+                </div>
+                <h1>Experience AI Chatbots Through <span class="highlight">Gameplay</span></h1>
+                <p>Play our interactive game to see how AI chatbots can transform customer support. Collect documents, interact with customers, and level up your virtual assistant!</p>
+                <a href="https://www.chatbase.co/?via=apihelpdesk" target="_blank" class="cta-button primary">Try Chatbase (Affiliate Link)</a>
+                <p style="font-size: 14px; margin-top: 10px;">No credit card required</p>
+            </div>
+        </section>
+        
+        <div class="disclaimer-banner">
+            <strong>Affiliate Disclosure:</strong> I am an affiliate partner of Chatbase. When you click on links to Chatbase on this page and make a purchase, I may earn a commission. This doesn't increase your cost. This game and website are not created by, endorsed by, or officially connected to Chatbase.co.
+        </div>
+        
+        <section class="game-showcase">
+            <h2>Play AI Chatbot Demo Game</h2>
+            <p>Train your virtual assistant, collect documents, and help customers in this fun interactive game!</p>
+            
+            <div class="game-instructions">
+                <h3>How to Play:</h3>
+                <ul>
+                    <li><strong>Movement:</strong> Use WASD or arrow keys to move your chatbot</li>
+                    <li><strong>Shooting:</strong> Click to shoot bugs that try to attack you</li>
+                    <li><strong>Collect Documents:</strong> Touch floating documents to collect them and earn points</li>
+                    <li><strong>Help Customers:</strong> Stay near customers with question marks to help them and earn more points</li>
+                    <li><strong>Power-ups:</strong> Collect special items for temporary boosts like speed, shields, and more</li>
+                    <li><strong>Level Up:</strong> Reach score goals to advance to more challenging levels</li>
+                </ul>
+                <p style="margin-top: 15px; color: #ff0000; font-weight: bold;">Important: Click inside the game area first to enable keyboard controls</p>
+            </div>
+            
+            <div class="game-container">
+                <iframe src="index.html" frameborder="0" allow="fullscreen" allowfullscreen="true"></iframe>
+            </div>
+            
+            <div class="leaderboard">
+                <h3>Top Players</h3>
+                <p>Compete for the highest score and see how you rank against other players!</p>
+                <div id="leaderboard-container">
+                    <p>Play the game to get on the leaderboard!</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="video-section">
+            <h2>See Chatbase in Action</h2>
+            <p>Watch how easy it is to create your own AI chatbot with Chatbase</p>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/6C9gXYtyuXo" title="Chatbase Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </section>
+        
+        <section class="benefits">
+            <div class="benefit">
+                <div class="benefit-icon">🚀</div>
+                <h2>Easy Setup</h2>
+                <p>Create AI chatbots in minutes with Chatbase's user-friendly interface. No coding required - just upload your documents and your chatbot is ready to go.</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">📚</div>
+                <h2>Knowledge Base</h2>
+                <p>Train AI on your specific documents, FAQs, and knowledge base to create a customized virtual assistant that knows your business inside and out.</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">💬</div>
+                <h2>Multi-Channel</h2>
+                <p>Deploy your virtual assistant across multiple platforms including your website, WhatsApp, Slack, and more to reach your customers wherever they are.</p>
+            </div>
+        </section>
+        
+        <section class="final-cta">
+            <h2>Ready to Try an AI Chatbot?</h2>
+            <p>Create your own virtual assistant today and see how it can help your business provide better customer support.</p>
+            <a href="https://www.chatbase.co/?via=apihelpdesk" target="_blank" class="cta-button primary">Get Started with Chatbase (Affiliate Link)</a>
+            <p style="font-size: 14px; margin-top: 10px;">No credit card required • Cancel anytime</p>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2023 AI Chatbot Demo Game. Created by a Chatbase affiliate partner.</p>
+        <p style="margin-top: 10px;">This page contains affiliate links to Chatbase. If you make a purchase, I may earn a commission at no extra cost to you.</p>
+        <p style="margin-top: 10px;"><strong>DISCLAIMER:</strong> This is not an official Chatbase website. This game and website are created by an affiliate and are not affiliated with, endorsed by, or connected to Chatbase.co.</p>
+    </footer>
+    
+    <script>
+        // Add event listener to notify users to click on the game to enable controls
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameFrame = document.querySelector('.game-container iframe');
+            if (gameFrame) {
+                gameFrame.addEventListener('load', function() {
+                    const notification = document.createElement('div');
+                    notification.style.position = 'absolute';
+                    notification.style.top = '50%';
+                    notification.style.left = '50%';
+                    notification.style.transform = 'translate(-50%, -50%)';
+                    notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                    notification.style.color = 'white';
+                    notification.style.padding = '15px 20px';
+                    notification.style.borderRadius = '5px';
+                    notification.style.zIndex = '1000';
+                    notification.style.pointerEvents = 'none';
+                    notification.style.opacity = '1';
+                    notification.style.transition = 'opacity 0.5s';
+                    notification.style.fontWeight = 'bold';
+                    notification.style.fontSize = '18px';
+                    notification.textContent = 'CLICK HERE TO ENABLE CONTROLS';
+                    
+                    document.querySelector('.game-container').appendChild(notification);
+                    
+                    // Keep the notification visible longer
+                    setTimeout(function() {
+                        notification.style.opacity = '0';
+                        setTimeout(function() {
+                            notification.remove();
+                        }, 500);
+                    }, 5000);
+                });
+            }
+            
+            // Add message passing for keyboard events to the iframe
+            window.addEventListener('keydown', function(e) {
+                if (gameFrame && gameFrame.contentWindow) {
+                    gameFrame.contentWindow.postMessage({
+                        type: 'keyEvent',
+                        eventType: 'keydown',
+                        key: e.key,
+                        keyCode: e.keyCode,
+                        which: e.which,
+                        code: e.code
+                    }, '*');
+                }
+            });
+            
+            window.addEventListener('keyup', function(e) {
+                if (gameFrame && gameFrame.contentWindow) {
+                    gameFrame.contentWindow.postMessage({
+                        type: 'keyEvent',
+                        eventType: 'keyup',
+                        key: e.key,
+                        keyCode: e.keyCode,
+                        which: e.which,
+                        code: e.code
+                    }, '*');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
